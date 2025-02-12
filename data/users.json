@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "email": "john123@gmail.com",
+        "name": "John Doe",
+        "password": "123",
+        "profile": "/images/empty_profile.png"
+    },
+    {
+        "id": 2,
+        "email": "sandra123@gmail.com",
+        "name": "Sandra Smith",
+        "password": "123",
+        "profile": "/images/empty_profile.png"
+    }
+]
