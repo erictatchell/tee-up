@@ -6,7 +6,7 @@ interface ButtonProps {
     submit?: boolean;
   }
   
-  export default function Button({ link, text, backgroundColor = "teeUpGreen", textColor = "white", submit = false }: ButtonProps) {
+  export default function MButton({ link, text, backgroundColor = "teeUpGreen", textColor = "white", submit = false }: ButtonProps) {
       if(submit) {
         return (
           <button 

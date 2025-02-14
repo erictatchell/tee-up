@@ -1,4 +1,4 @@
-import Button from "./components/misc/button";
+import MButton from "./components/misc/button";
 
 export default function Home() {
   return (
@@ -8,8 +8,8 @@ export default function Home() {
         <h1 className="text-[69.33px]">TeeUp</h1>
         <div className="flex gap-4">
           {/* How it Works button jumps to section below */}
-          <Button link="#how-it-works" text="How it Works" />
-          <Button link="/" text="Get Started" />
+          <MButton link="#how-it-works" text="How it Works" />
+          <MButton link="/" text="Get Started" />
         </div>
       </main>
       {/* "How It Works" Section - Below the Fold */}

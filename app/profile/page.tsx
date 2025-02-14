@@ -1,4 +1,3 @@
-import Button from "../components/misc/button";
 import Image from "next/image";
 import users from "../../data/users.json";
 
