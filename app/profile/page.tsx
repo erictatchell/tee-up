@@ -8,9 +8,9 @@ export default async function Profile() {
   const user = session?.user;
 
   const userInfo = {
-    name: user?.name,
-    email: user?.email,
-    image: user?.image
+    name: user?.name || "",
+    email: user?.email || "",
+    image: user?.image || ""
   };
   return (
     <div className="flex flex-col items-center font-[family-name:var(--font-geist-sans)]">

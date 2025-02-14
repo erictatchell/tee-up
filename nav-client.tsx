@@ -10,8 +10,7 @@ interface NavClientProps {
 
 const NavClient: React.FC<NavClientProps> = ({ name }) => {
   return (
-<>
-
+			<>
         {!name ? (
           <button
             type="submit"
