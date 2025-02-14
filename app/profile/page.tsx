@@ -1,7 +1,18 @@
 import Image from "next/image";
+import { auth } from "@/auth"
 import users from "../../data/users.json";
 
-export default function Profile() {
+import NavClient from "@/nav-client";  
+
+export default async function Profile() {
+  const session = await auth();
+  const user = session?.user;
+
+  const userInfo = {
+    name: user?.name,
+    email: user?.email,
+    image: user?.image
+  };
   return (
     <div className="flex flex-col items-center font-[family-name:var(--font-geist-sans)]">
       {/* Main Section - Full Screen */}
@@ -12,8 +23,9 @@ export default function Profile() {
         width={200}
         height={200}
         />
-        <label>{users[0].name}</label>
-        <label>{users[0].email}</label>
+        <label>{userInfo.name}</label>
+        <label>{userInfo.email}</label>
+        <NavClient name={userInfo.name}/>
       </main>
     </div>
   );

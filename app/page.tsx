@@ -1,6 +1,10 @@
+"use client";
 import MButton from "./components/misc/button";
+import { signIn } from "next-auth/react";
 
+import NavClient from "@/nav-client";  
 export default function Home() {
+
   return (
     <div className="flex flex-col items-center font-[family-name:var(--font-geist-sans)]">
       {/* Main Section - Full Screen */}
@@ -10,6 +14,7 @@ export default function Home() {
           {/* How it Works button jumps to section below */}
           <MButton link="#how-it-works" text="How it Works" />
           <MButton link="/" text="Get Started" />
+
         </div>
       </main>
       {/* "How It Works" Section - Below the Fold */}

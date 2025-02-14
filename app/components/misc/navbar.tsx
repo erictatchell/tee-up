@@ -1,8 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import Button from "./button";
 
-export default function NavBar() {
+import MButton from "./button";
+import { auth } from "@/auth";
+
+export default async function NavBar() {
+
   return (
     <header className="absolute top-0 left-0 w-full p-4 z-50">
       <div className="container mx-auto flex items-center justify-between">
@@ -15,8 +18,9 @@ export default function NavBar() {
             className="rounded-full"
           />
         </Link>
-        {/* TODO: Add distinct navigation for authenticated users */}
-        <Button link="/" text="Sign in with Google" />
+
+         <MButton link="/profile" text="Profile" />
+
       </div>
     </header>
   );
