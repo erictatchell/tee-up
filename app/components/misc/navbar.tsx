@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import MButton from "./button";
-import { auth } from "@/auth";
 
 export default async function NavBar() {
 

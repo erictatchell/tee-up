@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { auth } from "@/auth"
-import users from "../../data/users.json";
 
 import NavClient from "@/nav-client";  
 

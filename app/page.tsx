@@ -1,8 +1,6 @@
 "use client";
 import MButton from "./components/misc/button";
-import { signIn } from "next-auth/react";
 
-import NavClient from "@/nav-client";  
 export default function Home() {
 
   return (
