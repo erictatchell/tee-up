@@ -17,9 +17,7 @@ export default async function NavBar() {
             className="rounded-full"
           />
         </Link>
-
          <MButton link="/profile" text="Profile" />
-
       </div>
     </header>
   );

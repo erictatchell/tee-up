@@ -1,0 +1,19 @@
+{
+    "filterAgeRange": [
+        18,
+        65
+    ],
+    "filterCity": "",
+    "filterProvince": "BC",
+    "filterLocationRange": 30,
+    "filterHcRange": [
+        0,
+        54
+    ],
+    "filterGameLengthRange": [
+        3,
+        18
+    ],
+    "filterPlaysCasually": true,
+    "filterPlaysCompetitively": true
+}
