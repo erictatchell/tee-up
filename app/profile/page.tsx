@@ -2,6 +2,7 @@ import Image from "next/image";
 import { auth } from "@/auth"
 
 import NavClient from "@/nav-client";  
+import MButton from "../components/misc/button";
 
 export default async function Profile() {
   const session = await auth();
@@ -25,6 +26,8 @@ export default async function Profile() {
         <label>{userInfo.name}</label>
         <label>{userInfo.email}</label>
         <NavClient name={userInfo.name}/>
+        <MButton link="/profile/edit" text="Edit Profile" />
+        <MButton link="/profile/filters" text="Edit Filters" />
       </main>
     </div>
   );

@@ -11,7 +11,7 @@ interface ButtonProps {
         return (
           <button 
             type="submit" 
-            className={`px-6 py-3 text-lg rounded-lg transition duration-300 
+            className={`px-6 py-3 text-lg rounded-lg transition duration-300 text-center
             hover:brightness-90 hover:shadow-lg bg-${backgroundColor} text-${textColor}`}
           >
             {text}
@@ -21,7 +21,7 @@ interface ButtonProps {
         return (
           <a 
           href={link}
-          className={`px-6 py-3 text-lg rounded-lg transition duration-300 
+          className={`px-6 py-3 text-lg rounded-lg transition duration-300 text-center
               hover:brightness-90 hover:shadow-lg bg-${backgroundColor} text-${textColor}`}
         >
           {text}

@@ -1,0 +1,11 @@
+{
+  "filterCity": "",
+  "filterProvince": "",
+  "filterLocationRange": 0,
+  "minHc": 0,
+  "maxMc": 0,
+  "minGameLength": 0,
+  "maxGameLength": 0,
+  "filterCasual": false,
+  "filterCompetitive": false
+}
