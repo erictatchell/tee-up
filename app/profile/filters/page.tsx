@@ -3,70 +3,79 @@
 import { useState, useEffect } from "react";
 import { Range } from "react-range";
 import MButton from "@/app/components/misc/button";
-import filters from "../../../data/filters.json";
 
 export default function ProfileFilters() {
+
   const [userInfo, setUserInfo] = useState({
-    filterAgeRange: filters.filterAgeRange,
-    filterCity: filters.filterCity,
-    filterProvince: filters.filterProvince,
-    filterLocationRange: filters.filterLocationRange,
-    filterHcRange: filters.filterHcRange,
-    filterGameLengthRange: filters.filterGameLengthRange,
-    filterPlaysCasually: filters.filterPlaysCasually,
-    filterPlaysCompetitively: filters.filterPlaysCompetitively,
+    filterAgeRange: [18, 100],
+    filterCity: "",
+    filterProvince: "",
+    filterLocationRange: 0,
+    filterHcRange: [0, 54],
+    filterGameLengthRange: [3, 18],
+    filterPlaysCasually: false,
+    filterPlaysCompetitively: false,
   });
 
+  const [saveMessage, setSaveMessage] = useState(""); // State for success message
+
   useEffect(() => {
-    async function fetchUser() {
+    async function fetchFilters() {
       try {
-        // TODO: Fetch user from the backend
-        const res = await fetch("/api/user");
-        if (!res.ok) throw new Error("Failed to fetch user data");
+        const res = await fetch("/api/get-filters");
+        if (!res.ok) throw new Error("Failed to load filters");
 
         const data = await res.json();
-        if (data.user) {
-          setUserInfo({
-            filterAgeRange: [data.user.minAge, data.user.maxAge],
-            filterCity: data.user.filterCity,
-            filterProvince: data.user.filterProvince,
-            filterLocationRange: data.user.filterLocationRange,
-            filterHcRange: [data.user.minHc, data.user.maxHc],
-            filterGameLengthRange: [data.user.minGameLength, data.user.maxGameLength],
-            filterPlaysCasually: data.user.filterCasual,
-            filterPlaysCompetitively: data.user.filterCompetitive,
-          });
-        }
+        setUserInfo(data);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching filters:", error);
       }
     }
 
-    fetchUser();
+    fetchFilters();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    setUserInfo({
-      ...userInfo,
-      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
-    });
+  if (!userInfo) return <p>Loading...</p>;
+
+  const handleRangeChange = (field: string, values: number[]) => {
+    setUserInfo((prev) => ({ ...prev, [field]: values }));
   };
 
-  const handleRangeChange = (name: string, values: number[]) => {
-    setUserInfo({ ...userInfo, [name]: values });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Updated User Info:", userInfo);
-    // TODO: Send updated data to backend
+
+    // TODO: Update filters in the backend instead of local JSON data
+    try {
+      const res = await fetch("/api/update-filters", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userInfo),
+      });
+
+      if (!res.ok) throw new Error("Failed to update filters");
+
+      setSaveMessage("Filters saved successfully!"); // Show success message
+      setTimeout(() => setSaveMessage(""), 3000); // Clear message after 3 seconds
+    } catch (error) {
+      console.error("Error updating filters:", error);
+      setSaveMessage("Failed to save filters."); // Show error message
+      setTimeout(() => setSaveMessage(""), 3000);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-6">
-      <h1 className="text-4xl font-bold">Filter Profiles</h1>
-
+    <div className="flex flex-col items-center min-h-screen p-6 pt-20">
+      <h1 className="text-4xl font-bold mb-6">Filter Profiles</h1>
+      {saveMessage && (
+        <div className="bg-green-100 text-green-800 p-2 rounded-md mb-4 text-center w-full max-w-lg">
+          {saveMessage}
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-lg">
         {/* Age Range */}
         <div className="flex flex-col gap-2">
@@ -99,6 +108,7 @@ export default function ProfileFilters() {
             value={userInfo.filterCity}
             onChange={handleChange}
             className="p-2 border border-gray-300 rounded-md"
+            required
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -108,6 +118,7 @@ export default function ProfileFilters() {
             value={userInfo.filterProvince}
             onChange={handleChange}
             className="p-2 border border-gray-300 rounded-md"
+            required
           >
             <option value="">Select Province</option>
             <option value="AB">Alberta</option>
@@ -123,18 +134,23 @@ export default function ProfileFilters() {
             <option value="NT">Northwest Territories</option>
             <option value="NU">Nunavut</option>
             <option value="YT">Yukon</option>
-        </select>
+          </select>
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-lg">Filter Location Range from City (km)</label>
           <input
-            type="number"
+            type="range"
             name="filterLocationRange"
             value={userInfo.filterLocationRange}
             onChange={handleChange}
             className="p-2 border border-gray-300 rounded-md"
-            min="0"
+            min="5"
+            max="50"
+            step="1"
           />
+          <div className="flex justify-between text-sm">
+            <span>{userInfo.filterLocationRange} km</span>
+          </div>
         </div>
         {/* Handicap Range */}
         <div className="flex flex-col gap-2">

@@ -5,6 +5,7 @@ import Image from "next/image";
 import MButton from "@/app/components/misc/button";
 
 export default function ProfileEdit() {
+
   const [userInfo, setUserInfo] = useState({
     image: "",
     city: "",
@@ -17,6 +18,8 @@ export default function ProfileEdit() {
     tees: "blue",
     isCompetitive: false,
   });
+
+  const [saveMessage, setSaveMessage] = useState(""); // State for success message
 
   useEffect(() => {
     async function fetchSession() {
@@ -57,15 +60,29 @@ export default function ProfileEdit() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+
     e.preventDefault();
-    console.log("Updated User Info:", userInfo);
-    // TODO: Send updated data to backend
+
+    // TODO: Send updated user data to backend
+    // try {
+    //   if (!res.ok) throw new Error("Failed to update profile");
+    //   setSaveMessage("Profile saved successfully!"); // Show success message
+    //   setTimeout(() => setSaveMessage(""), 3000); // Clear message after 3 seconds
+    // } catch (error) {
+    //   console.error("Error updating profile:", error);
+    //   setSaveMessage("Failed to save profile."); // Show error message
+    //   setTimeout(() => setSaveMessage(""), 3000);
+    // }
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-6">
-      <h1 className="text-4xl font-bold">Edit Profile</h1>
-
+    <div className="flex flex-col items-center min-h-screen p-6 pt-20">
+      <h1 className="text-4xl font-bold mb-6">Edit Profile</h1>
+      {saveMessage && (
+        <div className="bg-green-100 text-green-800 p-2 rounded-md mb-4 text-center w-full max-w-lg">
+          {saveMessage}
+        </div>
+      )}
       <div className="relative w-32 h-32">
         <Image
           src={userInfo.image || "/images/empty_profile.png"}
@@ -85,6 +102,7 @@ export default function ProfileEdit() {
             value={userInfo.city}
             onChange={handleChange}
             className="w-full p-2 border rounded"
+            required
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -94,6 +112,7 @@ export default function ProfileEdit() {
             value={userInfo.province}
             onChange={handleChange}
             className="p-2 border border-gray-300 rounded-md"
+            required
           >
             <option value="">Select Province</option>
             <option value="AB">Alberta</option>
@@ -114,14 +133,16 @@ export default function ProfileEdit() {
         <div className="flex flex-col gap-2">
           <label className="text-lg">Handicap</label>
           <input
-            type="number"
+            type="range"
             name="hc"
             value={userInfo.hc}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full"
             min="0"
             max="54"
+            step="1"
           />
+          <span>{userInfo.hc}</span>
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-lg">Favourite Course</label>
@@ -136,15 +157,17 @@ export default function ProfileEdit() {
         <div className="flex flex-col gap-2">
           <label className="text-lg">Game Length</label>
           <input
-            type="number"
+            type="range"
             name="gameLength"
             value={userInfo.gameLength}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full"
             min="0"
             max="18"
-            step={3}
+            step="3"
+            required
           />
+          <span>{userInfo.gameLength} holes</span>
         </div>
         <div className="block flex gap-2">
           <label className="text-lg">Cart</label>
@@ -163,6 +186,7 @@ export default function ProfileEdit() {
             value={userInfo.tees}
             onChange={handleChange}
             className="w-full p-2 border rounded"
+            required
           />
         </div>
         <div className="block flex gap-2">
