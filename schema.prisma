@@ -9,10 +9,10 @@ generator client {
 
 model User {
   id            String          @id @default(cuid())
-  name          String?
+  name          String
   email         String          @unique
   emailVerified DateTime?
-  image         String?
+  image         String
   accounts      Account[]
   sessions      Session[]
   Authenticator Authenticator[]
@@ -22,12 +22,12 @@ model User {
 
   profilePhoto String? // S3 path
   photoGallery String[]
-  handicap     Float?
-  age          Int?
-  gender       Int?
-  country      String?
-  province     String?
-  city         String?
+  handicap     Float
+  age          Int
+  gender       Int
+  country      String
+  province     String
+  city         String
 
   preferenceSet   PreferenceSet? @relation(fields: [preferenceSetId], references: [preferenceSetId])
   preferenceSetId String?        @unique
@@ -35,25 +35,25 @@ model User {
 
 model PreferenceSet {
   preferenceSetId         String   @id @default(cuid())
-  distanceRange           Float?
+  distanceRange           Float
   preferredCourses        String[]
-  similarAge              Boolean?
-  sameGender              Boolean?
-  playWithSimilarHandicap Boolean?
-  teeBoxes                Int? // Tips | Blue | White | Red
-  cart                    Int? // Yes | No | Doesn’t Matter
+  similarAge              Boolean
+  sameGender              Boolean
+  playWithSimilarHandicap Boolean
+  teeBoxes                Int // Tips | Blue | White | Red
+  cart                    Int // Yes | No | Doesn’t Matter
   timeOfDay               Int[] // Morning | Afternoon | Evening
   weatherPreference       Int[] // Rain | Overcast | Sunny
   paceOfPlay              Int[] // Slow | Normal Speed | Fast
   conversationLevel       Int[] // Quiet | Doesn’t matter | Chatty
-  drinking                Boolean?
-  okayWithPartnerDrinking Boolean?
-  smoking                 Boolean?
-  okayWithPartnerSmoking  Boolean?
-  music                   Boolean?
+  drinking                Boolean
+  okayWithPartnerDrinking Boolean
+  smoking                 Boolean
+  okayWithPartnerSmoking  Boolean
+  music                   Boolean
   musicPreference         Int[] // Various genres
-  wager                   Boolean?
-  wagerPreference         String?
+  wager                   Boolean
+  wagerPreference         String
   User                    User?
 }
 

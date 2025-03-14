@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { prisma } from "@/prisma";
 import EditProfile from "./edit-profile";
-
+import { PreferenceSet, User } from "@prisma/client";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -10,7 +10,7 @@ export default async function ProfilePage() {
     return <p>You must be signed in to view this page.</p>;
   }
 
-  let user = await prisma.user.findUnique({
+  let user: User | null = await prisma.user.findUnique({
     where: { id: session.user.id },
     include: { preferenceSet: true },
   });
@@ -19,28 +19,29 @@ export default async function ProfilePage() {
     return <p>User not found.</p>;
   }
 
-  if (!user.preferenceSet) {
-    const preferenceSet = await prisma.preferenceSet.create({
+  let preferenceSet: PreferenceSet;
+  if (!user.preferenceSetId) {
+    preferenceSet = await prisma.preferenceSet.create({
       data: {
-        distanceRange: null,
+        distanceRange: 0,
         preferredCourses: [],
-        similarAge: null,
-        sameGender: null,
-        playWithSimilarHandicap: null,
-        teeBoxes: null,
-        cart: null,
+        similarAge: false,
+        sameGender: false,
+        playWithSimilarHandicap: false,
+        teeBoxes: 0,
+        cart: 0,
         timeOfDay: [],
         weatherPreference: [],
         paceOfPlay: [],
         conversationLevel: [],
-        drinking: null,
-        okayWithPartnerDrinking: null,
-        smoking: null,
-        okayWithPartnerSmoking: null,
-        music: null,
+        drinking: false,
+        okayWithPartnerDrinking: false,
+        smoking: false,
+        okayWithPartnerSmoking: false,
+        music: false,
         musicPreference: [],
-        wager: null,
-        wagerPreference: null,
+        wager: false,
+        wagerPreference: ,
         User: { connect: { id: user.id } },
       },
     });
@@ -50,16 +51,19 @@ export default async function ProfilePage() {
 
 
 async function saveUserData(
-    updatedUser: Partial<typeof user>,
-    updatedPreferences: Partial<typeof user.preferenceSet>
+    updatedUser: User,
+    updatedPreferences: PreferenceSet
   ) {
     "use server"; 
+    if (!user) {
+      return;
+    }
 
     return await prisma.user.update({
       where: { id: user.id },
       data: {
-        email: user.email,
         ...updatedUser,
+        email: updatedUser.email,
         preferenceSet: user.preferenceSet
           ? {
               update: { ...updatedPreferences },
