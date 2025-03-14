@@ -1,39 +1,36 @@
 import { useState } from "react";
 
-export type Profile = {
-  user_id: number;
-  preference_id: number;
-  name: string;
-  profile_photo: string; // S3 path
-  photo_gallery: string[]; // S3 paths
-  handicap: number;
-  age: number;
-  gender: string;
-  country: string;
-  province_or_state: string;
-  city: string;
+export type User = {
+  id: string;
+  profile_photo?: string | null; // S3 path
+  photo_gallery?: string[] | null; // S3 paths
+  handicap?: number | null;
+  age?: number | null;
+  gender?: boolean | null;
+  country?: string | null;
+  province?: string | null;
+  city?: string | null;
 };
 
 export type PreferenceSet = {
-  preferences_set_id: number;
-  user_id: number;
-  preferred_courses: string[];
-  similar_age: boolean;
-  same_gender: boolean;
-  play_with_similar_handicap: boolean;
-  tee_boxes: 0 | 1 | 2 | 3; // Tips | Blue | White | Red
-  cart: 0 | 1 | 2; // Yes | No | Doesn’t Matter
-  time_of_day: (0 | 1 | 2)[]; // Morning | Afternoon | Evening
-  weather_preference: (0 | 1 | 2)[]; // Rain | Overcast | Sunny
-  pace_of_play: 0 | 1 | 2; // Slow | Normal Speed | Fast
-  conversation_level: 0 | 1 | 2; // Quiet | Doesn’t matter | Chatty
-  drinking: boolean;
-  okay_with_partner_drinking: boolean;
-  smoking: boolean;
-  okay_with_partner_smoking: boolean;
-  music: boolean;
-  music_preference: (0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19)[]; // Rock | Pop | Hip-Hop | Jazz | Classical | Country | Electronic | Reggae | Blues | Metal | Folk | R&B | Latin | Soul | Funk | Indie | Punk | K-Pop | House | Techno
-  wager: boolean;
-  wager_preference?: string;
+  preference_set_id: string;
+  distance_range?: number | null;
+  preferred_courses?: string[] | null;
+  similar_age?: boolean | null;
+  same_gender?: boolean | null;
+  play_with_similar_handicap?: boolean | null;
+  tee_boxes?: number | null; // Tips | Blue | White | Red
+  cart?: number | null; // Yes | No | Doesn’t Matter
+  time_of_day?: number[] | null; // Morning | Afternoon | Evening
+  weather_preference?: number[] | null; // Rain | Overcast | Sunny
+  pace_of_play?: number[] | null; // Slow | Normal Speed | Fast
+  conversation_level?: number[] | null; // Quiet | Doesn’t matter | Chatty 
+  drinking?: boolean | null;
+  okay_with_partner_drinking?: boolean | null;
+  smoking?: boolean | null;
+  okay_with_partner_smoking?: boolean | null;
+  music?: boolean | null;
+  music_preference?: number[] | null; // Various genres
+  wager?: boolean | null;
+  wager_preference?: string | null;
 };
-

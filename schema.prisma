@@ -20,8 +20,44 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  profilePhoto  String?  // S3 path
+  photoGallery  String[]?
+  handicap      Float?
+  age           Int?
+  gender        Boolean?
+  country       String?
+  province      String?
+  city          String?
+  preferences   PreferenceSet? @relation(fields: [preferenceSetId], references: [preferenceSetId])
+  preferenceSetId String?
 }
  
+model PreferenceSet {
+  preferenceSetId            String   @id @default(cuid())
+  distanceRange              Float?
+  preferredCourses           String[]?
+  similarAge                 Boolean?
+  sameGender                 Boolean?
+  playWithSimilarHandicap    Boolean?
+  teeBoxes                   Int? // Tips | Blue | White | Red
+  cart                       Int? // Yes | No | Doesn’t Matter
+  timeOfDay                  Int[]? // Morning | Afternoon | Evening
+  weatherPreference          Int[]? // Rain | Overcast | Sunny
+  paceOfPlay                 Int[]? // Slow | Normal Speed | Fast
+  conversationLevel          Int[]? // Quiet | Doesn’t matter | Chatty
+  drinking                   Boolean?
+  okayWithPartnerDrinking    Boolean?
+  smoking                    Boolean?
+  okayWithPartnerSmoking     Boolean?
+  music                      Boolean?
+  musicPreference            Int[]? // Various genres
+  wager                      Boolean?
+  wagerPreference            String?
+  user                       User?   @relation(fields: [userId], references: [id])
+  userId                     String?
+}
+
 model Account {
   userId            String
   type              String
