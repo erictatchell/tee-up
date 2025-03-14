@@ -24,7 +24,7 @@ model User {
   photoGallery String[]
   handicap     Float?
   age          Int?
-  gender       Boolean?
+  gender       Int?
   country      String?
   province     String?
   city         String?

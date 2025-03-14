@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-// Define mappings for dropdown options
+const GENDERS = { 0: "Male", 1: "Female", 2: "Other", 3: "Prefer not to say" };
 const CART_OPTIONS = { 0: "No", 1: "Yes", 2: "Doesn’t Matter" };
 const TEE_BOX_OPTIONS = { 0: "Tips", 1: "Blue", 2: "White", 3: "Red" };
 const TIME_OF_DAY_OPTIONS = { 0: "Morning", 1: "Afternoon", 2: "Evening" };
@@ -17,7 +17,7 @@ export default function EditProfile({ user, preferences, saveUserData }) {
     profilePhoto: user.profilePhoto || "",
     handicap: user.handicap || "",
     age: user.age || "",
-    gender: user.gender || "",
+    gender: user.gender || 0, 
     country: user.country || "",
     province: user.province || "",
     city: user.city || "",
@@ -51,7 +51,7 @@ export default function EditProfile({ user, preferences, saveUserData }) {
         profilePhoto: formData.profilePhoto,
         handicap: Number(formData.handicap) || undefined,
         age: Number(formData.age) || undefined,
-        gender: formData.gender === "true",
+        gender: Number(formData.gender) || undefined,
         country: formData.country,
         province: formData.province,
         city: formData.city,
@@ -83,88 +83,157 @@ export default function EditProfile({ user, preferences, saveUserData }) {
   }
 
   return (
-    <div className="flex justify-center">
-      <form onSubmit={handleSubmit} className="mt-24 md:w-1/2 space-y-4 p-4 border rounded shadow-md">
-        <h2 className="text-xl font-semibold">Edit Profile</h2>
+<form
+  onSubmit={handleSubmit}
+>
+<div className="flex justify-center">
+<div className="mt-24 w-1/2 space-y-4">
+  <h2 className="text-xl font-semibold">Edit Profile</h2>
 
-        {/* User Fields */}
-        <div><label>Name</label><input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="border p-2 w-full" /></div>
-
-        <hr className="my-4" />
-
-        {/* Preferences */}
-        <h3 className="text-lg font-semibold">Preferences</h3>
-
-        <div>
-          <label>Distance Range ({formData.distanceRange} km)</label>
-          <input type="range" min="1" max="100" value={formData.distanceRange} onChange={(e) => setFormData({ ...formData, distanceRange: Number(e.target.value) })} className="w-full" />
-        </div>
-
-        {/* Dropdowns for single-select values */}
-{[
-  { label: "Tee Boxes", name: "teeBoxes", options: TEE_BOX_OPTIONS },
-  { label: "Cart Preference", name: "cart", options: CART_OPTIONS },
-].map(({ label, name, options }) => (
-  <div key={name}>
-    <label>{label}</label>
-    <select
-      value={formData[name] !== undefined ? String(formData[name]) : ""}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          [name]: e.target.value !== "" ? Number(e.target.value) : undefined,
-        })
-      }
-      className="border p-2 w-full"
-    >
-      <option value="">Select</option>
-      {Object.entries(options).map(([key, value]) => (
-        <option key={key} value={key}>
-          {value}
-        </option>
-      ))}
-    </select>
-  </div>
-))}
-
-        {/* Multi-selects */}
-        {[
-          { label: "Time of Day", name: "timeOfDay", options: TIME_OF_DAY_OPTIONS },
-          { label: "Weather Preferences", name: "weatherPreference", options: WEATHER_OPTIONS },
-          { label: "Music Preferences", name: "musicPreference", options: MUSIC_PREFERENCES },
-          { label: "Pace of Play", name: "paceOfPlay", options: PACE_OF_PLAY_OPTIONS },
-          { label: "Conversation Level", name: "conversationLevel", options: CONVERSATION_LEVEL_OPTIONS },
-        ].map(({ label, name, options }) => (
-          <div key={name}>
-            <label>{label}</label>
-            <select multiple value={formData[name].map(String)} onChange={(e) => setFormData({ ...formData, [name]: Array.from(e.target.selectedOptions, (opt) => Number(opt.value)) })} className="border p-2 w-full">
-              {Object.entries(options).map(([key, value]) => <option key={key} value={key}>{value}</option>)}
-            </select>
-          </div>
-        ))}
-
-        {/* Boolean Checkboxes */}
-        {[
-          { label: "Prefer Similar Age?", name: "similarAge" },
-          { label: "Prefer Same Gender?", name: "sameGender" },
-          { label: "Play with Similar Handicap?", name: "playWithSimilarHandicap" },
-          { label: "Drinking Allowed?", name: "drinking" },
-          { label: "Okay with Partner Drinking?", name: "okayWithPartnerDrinking" },
-          { label: "Smoking Allowed?", name: "smoking" },
-          { label: "Okay with Partner Smoking?", name: "okayWithPartnerSmoking" },
-          { label: "Listen to Music?", name: "music" },
-          { label: "Wager on Games?", name: "wager" },
-        ].map(({ label, name }) => (
-          <div key={name}>
-            <label>
-              <input type="checkbox" checked={formData[name]} onChange={(e) => setFormData({ ...formData, [name]: e.target.checked })} className="mr-2" />
-              {label}
-            </label>
-          </div>
-        ))}
-
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">Save Changes</button>
-      </form>
+  {/* User Fields */}
+  {[
+    { label: "Name", name: "name", type: "text" },
+    { label: "Country", name: "country", type: "text" },
+    { label: "Province", name: "province", type: "text" },
+    { label: "City", name: "city" },
+    { label: "Handicap", name: "handicap", type: "number" },
+  ].map(({ label, name, type = "text" }) => (
+    <div key={name}>
+      <label>{label}</label>
+      <input
+        type={type}
+        value={formData[name]}
+        onChange={(e) => setFormData({ ...formData, [name]: e.target.value })}
+        className="border p-2 w-full"
+      />
     </div>
-  );
+  ))}
+
+
+{/* Gender (Horizontal Radio Buttons) */}
+<div className="my-4">
+  <label className="block mb-2 font-medium">Gender</label>
+  <div className="flex space-x-4">
+    {Object.entries(GENDERS).map(([key, value]) => (
+      <label key={key} className="inline-flex items-center cursor-pointer">
+        <input
+          type="radio"
+          name="gender"
+          value={key}
+          checked={String(formData.gender) === key}
+          onChange={(e) =>
+            setFormData({ ...formData, gender: Number(e.target.value) })
+          }
+          className="form-radio h-4 w-4 text-blue-500"
+        />
+        <span className="ml-2">{value}</span>
+      </label>
+    ))}
+  </div>
+</div>
+
+  <hr className="my-4" />
+
+  {/* Preferences Section */}
+  <h3 className="text-lg font-semibold">Preferences</h3>
+
+   <div>
+      <label className="block mb-2 font-medium">Distance Range ({formData.distanceRange} km)</label>
+      <input
+        type="range"
+        min="50"
+        max="200"
+        value={formData.distanceRange}
+        onChange={(e) => setFormData({ ...formData, distanceRange: Number(e.target.value) })}
+        className="w-full"
+      />
+    </div>
+  {/* Single-select Dropdowns */}
+  {[
+    { label: "Tee Boxes", name: "teeBoxes", options: TEE_BOX_OPTIONS },
+    { label: "Cart Preference", name: "cart", options: CART_OPTIONS },
+  ].map(({ label, name, options }) => (
+    <div key={name}>
+      <label>{label}</label>
+      <select
+        value={formData[name] !== undefined ? String(formData[name]) : ""}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            [name]: e.target.value !== "" ? Number(e.target.value) : undefined,
+          })
+        }
+        className="border p-2 w-full rounded"
+      >
+        <option value="">Select</option>
+        {Object.entries(options).map(([key, value]) => (
+          <option key={key} value={key}>
+            {value}
+          </option>
+        ))}
+      </select>
+    </div>
+  ))}
+
+  {/* Multi-selects (consistent styling) */}
+  {[
+    { label: "Time of Day", name: "timeOfDay", options: TIME_OF_DAY_OPTIONS },
+    { label: "Weather Preferences", name: "weatherPreference", options: WEATHER_OPTIONS },
+    { label: "Music Preferences", name: "musicPreference", options: MUSIC_PREFERENCES },
+    { label: "Pace of Play", name: "paceOfPlay", options: PACE_OF_PLAY_OPTIONS },
+    { label: "Conversation Level", name: "conversationLevel", options: CONVERSATION_LEVEL_OPTIONS },
+  ].map(({ label, name, options }) => (
+    <div key={name}>
+      <label>{label}</label>
+      <select
+        multiple
+        value={formData[name].map(String)}
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            [name]: Array.from(e.target.selectedOptions, (opt) => Number(opt.value)),
+          })
+        }
+        className="border p-2 w-full rounded"
+      >
+        {Object.entries(options).map(([key, value]) => (
+          <option key={key} value={key}>
+            {value}
+          </option>
+        ))}
+      </select>
+    </div>
+  ))}
+
+  {/* Boolean Checkboxes */}
+  {[
+    "similarAge",
+    "sameGender",
+    "playWithSimilarHandicap",
+    "drinking",
+    "okayWithPartnerDrinking",
+    "smoking",
+    "okayWithPartnerSmoking",
+    "music",
+  ].map((name) => (
+    <div key={name}>
+      <label className="inline-flex items-center">
+        <input
+          type="checkbox"
+          checked={formData[name]}
+          onChange={(e) => setFormData({ ...formData, [name]: e.target.checked })}
+          className="mr-2"
+        />
+        {name.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}?
+      </label>
+    </div>
+  ))}
+
+  <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
+    Save Changes
+  </button>
+</div>
+</div>
+</form>
+  )
 }
