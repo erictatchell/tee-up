@@ -6,52 +6,39 @@ import MButton from "@/app/components/misc/button";
 
 export default function ProfileEdit() {
 
-  const [userInfo, setUserInfo] = useState({
-    image: "",
-    city: "",
-    province: "",
-    locationRange: 0,
-    hc: 0,
-    favouriteCourse: "",
-    gameLength: 0,
-    hasCart: false,
-    tees: "blue",
-    isCompetitive: false,
-  });
+  const [savemessage, setsavemessage] = usestate(""); // state for success message
 
-  const [saveMessage, setSaveMessage] = useState(""); // State for success message
-
-  useEffect(() => {
-    async function fetchSession() {
+  useeffect(() => {
+    async function fetchsession() {
       try {
-        // TODO: Fetch user data from backend
+        // todo: fetch user data from backend
         const res = await fetch("/api/user");
-        if (!res.ok) throw new Error("Failed to fetch user data");
+        if (!res.ok) throw new error("failed to fetch user data");
 
         const data = await res.json();
         if (data.user) {
-          setUserInfo({
+          setuserinfo({
             image: data.user.image || "",
             city: data.user.city || "",
             province: data.user.province || "",
-            locationRange: data.user.locationRange || 0,
+            locationrange: data.user.locationrange || 0,
             hc: data.user.hc || 0,
-            favouriteCourse: data.user.favouriteCourse || "",
-            gameLength: data.user.gameLength || 0,
-            hasCart: data.user.hasCart || false,
+            favouritecourse: data.user.favouritecourse || "",
+            gamelength: data.user.gamelength || 0,
+            hascart: data.user.hascart || false,
             tees: data.user.tees || "blue",
-            isCompetitive: data.user.isCompetitive || false,
+            iscompetitive: data.user.iscompetitive || false,
           });
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("error fetching user data:", error);
       }
     }
 
-    fetchSession();
+    fetchsession();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handlechange = (e: react.changeevent<htmlinputelement | htmlselectelement>) => {
     const { name, value, type } = e.target;
     setUserInfo({
       ...userInfo,
