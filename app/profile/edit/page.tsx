@@ -10,7 +10,7 @@ export default async function ProfilePage() {
     return <p>You must be signed in to view this page.</p>;
   }
 
-  let user: User | null = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: { id: session.user.id },
     include: { preferenceSet: true },
   });
@@ -20,7 +20,9 @@ export default async function ProfilePage() {
   }
 
   let preferenceSet: PreferenceSet;
-  if (!user.preferenceSetId) {
+
+  // If the user doesn't have a preferenceSet, create one and update the user record
+  if (!user.preferenceSet) {
     preferenceSet = await prisma.preferenceSet.create({
       data: {
         distanceRange: 0,
@@ -41,56 +43,49 @@ export default async function ProfilePage() {
         music: false,
         musicPreference: [],
         wager: false,
-        wagerPreference: ,
+        wagerPreference: "",
         User: { connect: { id: user.id } },
       },
     });
 
-    user = { ...user, preferenceSet };
+    // Connect the newly created preferenceSet to the user
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        preferenceSet: { connect: { preferenceSetId: preferenceSet.preferenceSetId } },
+      },
+    });
+  } else {
+    // If the user already has a preferenceSet, use it
+    preferenceSet = user.preferenceSet;
   }
 
-
-async function saveUserData(
+  async function saveUserData(
     updatedUser: User,
     updatedPreferences: PreferenceSet
   ) {
-    "use server"; 
-    if (!user) {
+    "use server";
+    if (!updatedUser) {
       return;
     }
-
     return await prisma.user.update({
-      where: { id: user.id },
+      where: { id: updatedUser.id },
       data: {
-        ...updatedUser,
+        name: updatedUser.name,
         email: updatedUser.email,
-        preferenceSet: user.preferenceSet
-          ? {
-              update: { ...updatedPreferences },
-            }
-          : {
-              create: { ...updatedPreferences },
-            }
-      }
+        profilePhoto: updatedUser.profilePhoto,
+        handicap: updatedUser.handicap,
+        age: updatedUser.age,
+        gender: updatedUser.gender,
+        country: updatedUser.country,
+        province: updatedUser.province,
+        city: updatedUser.city,
+        preferenceSet: {
+          update: { ...updatedPreferences },
+        },
+      },
     });
   }
 
-  const safePreferences = {
-    ...user.preferenceSet,
-    distanceRange: user.preferenceSet?.distanceRange ?? "",
-    similarAge: user.preferenceSet?.similarAge ?? "",
-    sameGender: user.preferenceSet?.sameGender ?? "",
-    playWithSimilarHandicap: user.preferenceSet?.playWithSimilarHandicap ?? "",
-    teeBoxes: user.preferenceSet?.teeBoxes ?? "",
-    cart: user.preferenceSet?.cart ?? "",
-    drinking: user.preferenceSet?.drinking ?? "",
-    okayWithPartnerDrinking: user.preferenceSet?.okayWithPartnerDrinking ?? "",
-    smoking: user.preferenceSet?.smoking ?? "",
-    okayWithPartnerSmoking: user.preferenceSet?.okayWithPartnerSmoking ?? "",
-    music: user.preferenceSet?.music ?? "",
-    wager: user.preferenceSet?.wager ?? "",
-    wagerPreference: user.preferenceSet?.wagerPreference ?? "",
-  };
-
-  return <EditProfile saveUserData={saveUserData} user={user} preferences={safePreferences} />;
+  return <EditProfile saveUserData={saveUserData} user={user} preferences={preferenceSet} />;
 }

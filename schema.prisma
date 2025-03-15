@@ -12,7 +12,7 @@ model User {
   name          String
   email         String          @unique
   emailVerified DateTime?
-  image         String
+  image         String?
   accounts      Account[]
   sessions      Session[]
   Authenticator Authenticator[]
@@ -21,17 +21,18 @@ model User {
   updatedAt DateTime @updatedAt
 
   profilePhoto String? // S3 path
-  photoGallery String[]
-  handicap     Float
-  age          Int
-  gender       Int
-  country      String
-  province     String
-  city         String
+  photoGallery String[]  @default([])
+  handicap     Float    @default(0)
+  age          Int      @default(0)
+  gender       Int      @default(0)
+  country      String   @default("")
+  province     String   @default("")
+  city         String   @default("")
 
   preferenceSet   PreferenceSet? @relation(fields: [preferenceSetId], references: [preferenceSetId])
   preferenceSetId String?        @unique
 }
+
 
 model PreferenceSet {
   preferenceSetId         String   @id @default(cuid())
