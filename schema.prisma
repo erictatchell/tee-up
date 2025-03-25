@@ -21,7 +21,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   profilePhoto String? // S3 path
-  photoGallery String[]  @default([])
+  photoGallery String[] @default([])
   handicap     Float    @default(0)
   age          Int      @default(0)
   gender       Int      @default(0)
@@ -31,8 +31,9 @@ model User {
 
   preferenceSet   PreferenceSet? @relation(fields: [preferenceSetId], references: [preferenceSetId])
   preferenceSetId String?        @unique
-}
 
+  onboardingStatus OnboardingStatus?
+}
 
 model PreferenceSet {
   preferenceSetId         String   @id @default(cuid())
@@ -110,4 +111,11 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model OnboardingStatus {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
 }
