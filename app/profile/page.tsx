@@ -1,5 +1,8 @@
 import Image from "next/image";
-import { auth } from "@/auth"
+import { auth } from "@/auth";
+
+import { prisma } from "@/prisma";
+import { redirect } from "next/navigation";
 
 import NavClient from "@/nav-client";  
 import MButton from "../components/misc/button";
@@ -7,6 +10,20 @@ import MButton from "../components/misc/button";
 export default async function Profile() {
   const session = await auth();
   const user = session?.user;
+  
+  console.log("Session:", session);
+
+  if (!user?.id) {
+    redirect("/"); 
+  }
+
+  const onboardingStatus = await prisma.onboardingStatus.findUnique({
+    where: { userId: user.id },
+  });
+
+  if (!onboardingStatus) {
+    redirect("/onboarding");
+  }
 
   const userInfo = {
     name: user?.name || "",
