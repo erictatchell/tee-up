@@ -1,4 +1,5 @@
 "use client";
+import { signIn } from "next-auth/react";
 import MButton from "./components/misc/button";
 
 export default function Home() {
@@ -6,10 +7,19 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center font-[family-name:var(--font-geist-sans)]">
       {/* Main Section - Full Screen */}
-      <main className="relative z-10 flex flex-col items-center justify-center min-h-screen gap-8 text-center">
+      <main className="relative z-10 flex flex-col items-center justify-center min-h-screen gap-6 text-center">
         <h1 className="text-[69.33px]">TeeUp</h1>
-        <div className="flex gap-4">
-          {/* How it Works button jumps to section below */}
+
+        {/* Sign-in button */}
+        <button
+          onClick={() => signIn("google", { callbackUrl: "/profile" })}
+          className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+        >
+          Sign in with Google
+        </button>
+
+        {/* Original buttons: unchanged, just spaced below */}
+        <div className="flex gap-4 mt-6">
           <MButton link="#how-it-works" text="How it Works" />
           <MButton link="/" text="Get Started" />
 
