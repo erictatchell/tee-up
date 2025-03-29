@@ -13,25 +13,24 @@ const CONVERSATION_LEVEL_OPTIONS: Record<number, string> = { 0: "Quiet", 1: "Doe
 const MUSIC_PREFERENCES: Record<number, string> = { 0: "Rock", 1: "Pop", 2: "Jazz", 3: "Classical", 4: "Hip-Hop", 5: "Country" };
 
 export interface Profile {
-  id: string;  // Changed from number to string to match cuid()
+  id: string;
   name: string;
   age: number;
-  image: string | null;  // Made nullable
+  image: string | null;
   city: string;
   province: string;
-  country: string;  // Added country
-  gender: number;  // Added gender (0, 1, 2 enum)
-  handicap: number;  // Changed from hc to handicap and number to float
+  country: string;
+  gender: number;
+  handicap: number;
 
-  // Replaced old fields with preference set structure
   preferenceSet: {
     distanceRange: number;
-    preferredCourses: string[];  // Changed from favouriteCourse
+    preferredCourses: string[];
     similarAge: boolean;
     sameGender: boolean;
     playWithSimilarHandicap: boolean;
-    teeBoxes: number;  // Changed from string tees
-    cart: number;  // Changed from boolean hasCart
+    teeBoxes: number;
+    cart: number;
     timeOfDay: number[];
     weatherPreference: number[];
     paceOfPlay: number[];
@@ -45,14 +44,6 @@ export interface Profile {
     wager: boolean;
     wagerPreference: string;
   };
-
-  // Removed deprecated fields:
-  // - locationRange (replaced by distanceRange)
-  // - favouriteCourse (replaced by preferredCourses array)
-  // - gameLength
-  // - hasCart (replaced by cart number)
-  // - tees (replaced by teeBoxes number)
-  // - isCompetitive
 }
 
 interface ProfileCardProps {
@@ -100,7 +91,7 @@ export function ProfileCard({ profile, onSwipe }: ProfileCardProps) {
     >
       <div className="w-[400px] h-[400px] p-6 overflow-hidden rounded-lg">
         <img
-          src={profile.image || "/images/empty_profile.png"} // Use empty_profile.png as fallback
+          src={profile.image || "/images/empty_profile.png"}
           alt={profile.name}
           className="object-cover object-top w-full h-full rounded-lg"
         />
