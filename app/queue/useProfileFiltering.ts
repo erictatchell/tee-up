@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import users from "../../data/users.json";
 import filters from "../../data/filters.json";
-import { Profile } from "../components/queue/profileCard";
+import { Profile } from "../components/queue/ProfileCard";
 
 export default function useProfileFilter() {
 
