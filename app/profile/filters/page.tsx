@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Range } from "react-range";
-import MButton from "@/app/components/misc/button";
+import MButton from "@/app/components/misc/Button";
 
 export default function ProfileFilters() {
 
