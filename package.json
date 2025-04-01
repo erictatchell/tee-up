@@ -26,6 +26,7 @@
     "react-dom": "^19.0.0",
     "react-range": "^1.10.0",
     "react-swipeable": "^7.0.2",
+    "twilio": "^5.5.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

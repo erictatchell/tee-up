@@ -42,11 +42,11 @@ export default function QueuePage() {
         ) : (
           <>
             {/* Swipable Profile Card */}
-            <ProfileCard
+            {/* <ProfileCard
               key={profiles[currentProfileIndex]?.id} // Force re-render when profile changes
               profile={profiles[currentProfileIndex]}
               onSwipe={handleSwipe}
-            />
+            /> */}
           </>
         )}
       </main>
