@@ -16,7 +16,6 @@ export default async function Profile() {
   if (!user?.id) {
     redirect("/");
   }
-
   const onboardingStatus = await prisma.onboardingStatus.findUnique({
     where: { userId: user.id },
   });
