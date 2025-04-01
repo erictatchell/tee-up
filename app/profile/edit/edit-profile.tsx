@@ -1,7 +1,10 @@
 "use client";
 
+import { getSignedURL, addToDB } from "@/app/components/file/actions";
+import UploadFile from "@/app/components/file/upload";
 import { PreferenceSet, User } from "@prisma/client";
 import { useState } from "react";
+import Image from 'next/image'
 
 const GENDERS = { 0: "Male", 1: "Female", 2: "Other", 3: "Prefer not to say" };
 const CART_OPTIONS = { 0: "No", 1: "Yes", 2: "Doesn’t Matter" };
@@ -23,6 +26,9 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
   preferences,
   saveUserData,
 }) => {
+  const [files, setFiles] = useState<File[]>([]);
+
+
   if (preferences === false) {
     return <h1>Error: Preferences weren't found.</h1>;
   }
@@ -99,14 +105,89 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
           .map((course) => course.trim())
           .filter((course) => course !== ""),
       }
+
+
     );
+
+    await handleFiles(files)
   }
+
+
+  const handleFiles = async (files: File[]) => {
+    if (!files || files.length === 0) {
+      return;
+    }
+    const uploadPromises = files.map(async (file: File) => {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+      });
+      console.log(response)
+
+      if (response.ok) {
+        const { url, fields } = await response.json();
+        const signedURL = await getSignedURL({
+          fileType: file.type,
+          fileSize: file.size,
+          key: fields.key,
+          userId: user.id
+        });
+
+
+        addToDB(user.id,
+          signedURL.success!.url.split("?")[0],
+        );
+
+
+
+
+        // addToDB(file.name, DocumentID, "", [
+        //   signedURL.success!.url.split("?")[0],
+        // ]);
+
+        const formData = new FormData();
+        Object.entries(fields).forEach(([key, value]) => {
+          formData.append(key, value as string);
+        });
+        formData.append("file", file);
+
+        return fetch(url, {
+          method: "POST",
+          body: formData,
+        });
+      } else {
+        console.error("Failed to get pre-signed URL.");
+        return null;
+      }
+    });
+
+    const uploadResponses = await Promise.all(uploadPromises);
+
+    uploadResponses.forEach((uploadResponse: any) => {
+      if (uploadResponse && uploadResponse.ok) {
+      } else {
+        console.error("S3 Upload Error:", uploadResponse);
+        alert("Upload failed.");
+      }
+    });
+  };
+
+
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex justify-center">
         <div className="mt-24 w-1/2 space-y-4">
           <h2 className="text-xl font-semibold">Edit Profile</h2>
+          <Image
+            src={user.profilePhoto!}
+            width={500}
+            height={500}
+            alt="Picture of the author"
+          />
 
           {/* User Fields */}
           {[
@@ -261,12 +342,22 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
             </div>
           ))}
 
+          <div className="grid border-t border-gray-500 pt-6">
+            <UploadFile
+              files={files}
+              documentID={0}
+              description={""}
+              setFiles={setFiles}
+            />
+          </div>
+
           <button
             type="submit"
             className="bg-blue-500 text-white p-2 rounded w-full"
           >
             Save Changes
           </button>
+
         </div>
       </div>
     </form>

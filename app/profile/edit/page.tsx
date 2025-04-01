@@ -86,6 +86,15 @@ export default async function ProfilePage() {
       },
     });
   }
+  async function savePhoto(updatedUser: User ) {
+    "use server";
+    await prisma.user.update({
+      where: {id: updatedUser.id},
+      data: {
+        profilePhoto:  updatedUser.profilePhoto
+      }
+    })
+  }
 
   return <EditProfile saveUserData={saveUserData} user={user} preferences={preferenceSet} />;
 }

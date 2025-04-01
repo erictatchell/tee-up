@@ -58,6 +58,8 @@ export default async function OnboardingPage() {
     preferenceSet = user.preferenceSet;
   }
 
+
+
   async function saveUserData(updatedUser: User, updatedPreferences: PreferenceSet) {
     "use server";
 

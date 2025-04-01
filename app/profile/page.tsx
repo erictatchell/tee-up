@@ -30,15 +30,24 @@ export default async function Profile() {
     email: user?.email || "",
     image: user?.image || ""
   };
+  const dbUser = await prisma.user.findUnique({
+    where: {
+        id: user.id
+    }
+  })
+  let userImage: string| null | undefined = dbUser?.profilePhoto;
+  if (!userImage) {
+    userImage = '/images/empty_profile.png'
+  }
   return (
     <div className="flex flex-col items-center font-[family-name:var(--font-geist-sans)]">
       {/* Main Section - Full Screen */}
       <main className="relative z-10 flex flex-col items-center justify-center min-h-screen gap-8 text-center">
         <Image
-          src="/images/empty_profile.png"
-          alt="empty profile pic"
-          width={200}
-          height={200}
+          src={userImage}
+          width={500}
+          height={500}
+          alt="Picture of the author"
         />
         <label>{userInfo.name}</label>
         <label>{userInfo.email}</label>
