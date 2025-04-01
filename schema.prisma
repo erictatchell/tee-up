@@ -1,38 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id            String          @id @default(cuid())
-  name          String
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  Authenticator Authenticator[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  profilePhoto String? // S3 path
-  photoGallery String[] @default([])
-  handicap     Float    @default(0)
-  age          Int      @default(0)
-  gender       Int      @default(0)
-  country      String   @default("")
-  province     String   @default("")
-  city         String   @default("")
-
-  preferenceSet   PreferenceSet? @relation(fields: [preferenceSetId], references: [preferenceSetId])
-  preferenceSetId String?        @unique
-
+  id               String            @id @default(cuid())
+  name             String
+  email            String            @unique
+  emailVerified    DateTime?
+  image            String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  age              Int               @default(0)
+  city             String            @default("")
+  country          String            @default("")
+  handicap         Float             @default(0)
+  photoGallery     String[]          @default([])
+  preferenceSetId  String?           @unique
+  profilePhoto     String?
+  province         String            @default("")
+  gender           Int               @default(0)
+  accounts         Account[]
+  Authenticator    Authenticator[]
   onboardingStatus OnboardingStatus?
+  sessions         Session[]
+  preferenceSet    PreferenceSet?    @relation(fields: [preferenceSetId], references: [preferenceSetId])
 }
 
 model PreferenceSet {
@@ -42,18 +38,18 @@ model PreferenceSet {
   similarAge              Boolean
   sameGender              Boolean
   playWithSimilarHandicap Boolean
-  teeBoxes                Int // Tips | Blue | White | Red
-  cart                    Int // Yes | No | Doesn’t Matter
-  timeOfDay               Int[] // Morning | Afternoon | Evening
-  weatherPreference       Int[] // Rain | Overcast | Sunny
-  paceOfPlay              Int[] // Slow | Normal Speed | Fast
-  conversationLevel       Int[] // Quiet | Doesn’t matter | Chatty
+  teeBoxes                Int
+  cart                    Int
+  timeOfDay               Int[]
+  weatherPreference       Int[]
+  paceOfPlay              Int[]
+  conversationLevel       Int[]
   drinking                Boolean
   okayWithPartnerDrinking Boolean
   smoking                 Boolean
   okayWithPartnerSmoking  Boolean
   music                   Boolean
-  musicPreference         Int[] // Various genres
+  musicPreference         Int[]
   wager                   Boolean
   wagerPreference         String
   User                    User?
@@ -71,11 +67,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -84,10 +78,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -107,8 +100,7 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
 }
@@ -116,6 +108,6 @@ model Authenticator {
 model OnboardingStatus {
   id        String   @id @default(uuid())
   userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
