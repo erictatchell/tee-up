@@ -44,7 +44,6 @@ export default async function Profile() {
         <label>{userInfo.email}</label>
         <NavClient name={userInfo.name} />
         <MButton link="/profile/edit" text="Edit Profile" />
-        <MButton link="/profile/filters" text="Edit Filters" />
       </main>
     </div>
   );
