@@ -1,17 +1,17 @@
 {
   "filterAgeRange": [
     18,
-    65
+    100
   ],
   "filterCity": "Vancouver",
   "filterProvince": "BC",
-  "filterLocationRange": 30,
+  "filterLocationRange": 50,
   "filterHcRange": [
     0,
-    54
+    100
   ],
   "filterGameLengthRange": [
-    3,
+    1,
     18
   ],
   "filterPlaysCasually": true,

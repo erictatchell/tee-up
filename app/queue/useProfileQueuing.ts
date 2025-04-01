@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Profile } from "../components/queue/profileCard";
+import { Profile } from "../components/queue/ProfileCard";
 
 export default function useProfileQueuing(
     profiles: Profile[],

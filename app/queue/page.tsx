@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { ProfileCard } from "../components/queue/profileCard";
+import { ProfileCard } from "../components/queue/ProfileCard";
 import useProfileFilter from "./useProfileFiltering";
 import useProfileQueuing from "./useProfileQueuing";
 
-export default function Queue() {
+export default function QueuePage() {
 
   // Filtering hook
   const {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import users from "../../data/users.json";
 import filters from "../../data/filters.json";
-import { Profile } from "../components/queue/profileCard";
+import { Profile } from "../components/queue/ProfileCard";
 
 export default function useProfileFilter() {
 
@@ -18,9 +18,9 @@ export default function useProfileFilter() {
         const filteredProfiles = initialProfiles.filter((profile) => {
 
             // Destructure filters and profile data
-            const { filterAgeRange, filterCity, filterProvince, filterLocationRange, 
+            const { filterAgeRange, filterCity, filterProvince, filterLocationRange,
                 filterHcRange, filterGameLengthRange, filterPlaysCasually, filterPlaysCompetitively } = filters;
-            
+
             const { age, city, province, hc, gameLength, isCompetitive } = profile;
 
             if (filterAgeRange && (age < filterAgeRange[0] || age > filterAgeRange[1])) return false;

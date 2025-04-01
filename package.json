@@ -13,13 +13,14 @@
     "@prisma/adapter-pg": "^6.3.1",
     "@prisma/client": "^6.3.1",
     "framer-motion": "^12.4.10",
-    "next": "15.1.6",
+    "next": "^15.2.4",
     "next-auth": "^5.0.0-beta.25",
     "pg": "^8.13.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-range": "^1.10.0",
-    "react-swipeable": "^7.0.2"
+    "react-swipeable": "^7.0.2",
+    "twilio": "^5.5.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -27,6 +28,7 @@
     "@types/pg": "^8.11.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/twilio": "^3.19.2",
     "eslint": "^9.19.0",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",

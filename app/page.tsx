@@ -1,6 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
-import MButton from "./components/misc/button";
+import MButton from "./components/misc/Button";
 
 export default function Home() {
 
