@@ -1,7 +1,10 @@
 "use client";
 
+import { getSignedURL, addToDB } from "@/app/components/file/actions";
+import UploadFile from "@/app/components/file/upload";
 import { PreferenceSet, User } from "@prisma/client";
 import { useState } from "react";
+import Image from 'next/image'
 
 const GENDERS = { 0: "Male", 1: "Female", 2: "Other", 3: "Prefer not to say" };
 const CART_OPTIONS = { 0: "No", 1: "Yes", 2: "Doesn’t Matter" };
@@ -23,6 +26,9 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
   preferences,
   saveUserData,
 }) => {
+  const [files, setFiles] = useState<File[]>([]);
+
+
   if (preferences === false) {
     return <h1>Error: Preferences weren't found.</h1>;
   }
@@ -99,178 +105,263 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
           .map((course) => course.trim())
           .filter((course) => course !== ""),
       }
+
+
     );
+
+    await handleFiles(files)
   }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex justify-center">
-        <div className="mt-24 w-1/2 space-y-4">
-          <h2 className="text-xl font-semibold">Edit Profile</h2>
 
-          {/* User Fields */}
-          {[
-            { label: "Name", name: "name", type: "text" },
-            { label: "Country", name: "country", type: "text" },
-            { label: "Province", name: "province", type: "text" },
-            { label: "City", name: "city", type: "text" },
-            { label: "Handicap", name: "handicap", type: "number" },
-          ].map(({ label, name, type = "text" }) => (
-            <div key={name}>
-              <label>{label}</label>
-              <input
-                type={type}
-                value={(formData as any)[name]}
-                onChange={(e) =>
-                  setFormData({ ...formData, [name]: e.target.value })
-                }
-                className="border p-2 w-full"
-              />
-            </div>
-          ))}
+  const handleFiles = async (files: File[]) => {
+    if (!files || files.length === 0) {
+      return;
+    }
+    const uploadPromises = files.map(async (file: File) => {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+      });
+      console.log(response)
 
-          {/* Gender (Horizontal Radio Buttons) */}
-          <div className="my-4">
-            <label className="block mb-2 font-medium">Gender</label>
-            <div className="flex space-x-4">
-              {Object.entries(GENDERS).map(([key, value]) => (
-                <label key={key} className="inline-flex items-center cursor-pointer">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value={key}
-                    checked={String(formData.gender) === key}
-                    onChange={(e) =>
-                      setFormData({ ...formData, gender: Number(e.target.value) })
-                    }
-                    className="form-radio h-4 w-4 text-blue-500"
-                  />
-                  <span className="ml-2">{value}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+      if (response.ok) {
+        const { url, fields } = await response.json();
+        const signedURL = await getSignedURL({
+          fileType: file.type,
+          fileSize: file.size,
+          key: fields.key,
+          userId: user.id
+        });
 
-          <hr className="my-4" />
 
-          {/* Preferences Section */}
-          <h3 className="text-lg font-semibold">Preferences</h3>
+        addToDB(user.id,
+          signedURL.success!.url.split("?")[0],
+        );
 
-          <div>
-            <label className="block mb-2 font-medium">
-              Distance Range ({formData.distanceRange} km)
-            </label>
+
+
+
+// addToDB(file.name, DocumentID, "", [
+//   signedURL.success!.url.split("?")[0],
+// ]);
+
+const formData = new FormData();
+Object.entries(fields).forEach(([key, value]) => {
+  formData.append(key, value as string);
+});
+formData.append("file", file);
+
+return fetch(url, {
+  method: "POST",
+  body: formData,
+});
+      } else {
+  console.error("Failed to get pre-signed URL.");
+  return null;
+}
+    });
+
+const uploadResponses = await Promise.all(uploadPromises);
+
+uploadResponses.forEach((uploadResponse: any) => {
+  if (uploadResponse && uploadResponse.ok) {
+  } else {
+    console.error("S3 Upload Error:", uploadResponse);
+    alert("Upload failed.");
+  }
+});
+  };
+
+
+
+return (
+  <form onSubmit={handleSubmit}>
+    <div className="flex justify-center">
+      <div className="mt-24 w-1/2 space-y-4">
+        <h2 className="text-xl font-semibold">Edit Profile</h2>
+        <Image
+          src={user.profilePhoto!}
+          width={500}
+          height={500}
+          alt="Picture of the author"
+        />
+
+        {/* User Fields */}
+        {[
+          { label: "Name", name: "name", type: "text" },
+          { label: "Country", name: "country", type: "text" },
+          { label: "Province", name: "province", type: "text" },
+          { label: "City", name: "city", type: "text" },
+          { label: "Handicap", name: "handicap", type: "number" },
+        ].map(({ label, name, type = "text" }) => (
+          <div key={name}>
+            <label>{label}</label>
             <input
-              type="range"
-              min="50"
-              max="200"
-              value={formData.distanceRange}
+              type={type}
+              value={(formData as any)[name]}
               onChange={(e) =>
-                setFormData({ ...formData, distanceRange: Number(e.target.value) })
+                setFormData({ ...formData, [name]: e.target.value })
               }
-              className="w-full"
+              className="border p-2 w-full"
             />
           </div>
+        ))}
 
-          {/* Single-select Dropdowns */}
-          {[
-            { label: "Tee Boxes", name: "teeBoxes", options: TEE_BOX_OPTIONS },
-            { label: "Cart Preference", name: "cart", options: CART_OPTIONS },
-          ].map(({ label, name, options }) => (
-            <div key={name}>
-              <label>{label}</label>
-              <select
-                value={(formData as any)[name]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    [name]:
-                      e.target.value !== "" ? Number(e.target.value) : "",
-                  })
-                }
-                className="border p-2 w-full rounded"
-              >
-                <option value="">Select</option>
-                {Object.entries(options).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
-
-          {/* Multi-selects */}
-          {[
-            { label: "Time of Day", name: "timeOfDay", options: TIME_OF_DAY_OPTIONS },
-            { label: "Weather Preferences", name: "weatherPreference", options: WEATHER_OPTIONS },
-            { label: "Music Preferences", name: "musicPreference", options: MUSIC_PREFERENCES },
-            { label: "Pace of Play", name: "paceOfPlay", options: PACE_OF_PLAY_OPTIONS },
-            { label: "Conversation Level", name: "conversationLevel", options: CONVERSATION_LEVEL_OPTIONS },
-          ].map(({ label, name, options }) => (
-            <div key={name}>
-              <label>{label}</label>
-              <select
-                multiple
-                value={(formData as any)[name]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    [name]: Array.from(e.target.selectedOptions, (opt) =>
-                      Number(opt.value)
-                    ),
-                  })
-                }
-                className="border p-2 w-full rounded"
-              >
-                {Object.entries(options).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
-
-          {/* Boolean Checkboxes */}
-          {[
-            "similarAge",
-            "sameGender",
-            "playWithSimilarHandicap",
-            "drinking",
-            "okayWithPartnerDrinking",
-            "smoking",
-            "okayWithPartnerSmoking",
-            "music",
-          ].map((name) => (
-            <div key={name}>
-              <label className="inline-flex items-center">
+        {/* Gender (Horizontal Radio Buttons) */}
+        <div className="my-4">
+          <label className="block mb-2 font-medium">Gender</label>
+          <div className="flex space-x-4">
+            {Object.entries(GENDERS).map(([key, value]) => (
+              <label key={key} className="inline-flex items-center cursor-pointer">
                 <input
-                  type="checkbox"
-                  checked={(formData as any)[name]}
+                  type="radio"
+                  name="gender"
+                  value={key}
+                  checked={String(formData.gender) === key}
                   onChange={(e) =>
-                    setFormData({ ...formData, [name]: e.target.checked })
+                    setFormData({ ...formData, gender: Number(e.target.value) })
                   }
-                  className="mr-2"
+                  className="form-radio h-4 w-4 text-blue-500"
                 />
-                {name.replace(/([A-Z])/g, " $1").replace(/^./, (str) =>
-                  str.toUpperCase()
-                )}
-                ?
+                <span className="ml-2">{value}</span>
               </label>
-            </div>
-          ))}
-
-          <button
-            type="submit"
-            className="bg-blue-500 text-white p-2 rounded w-full"
-          >
-            Save Changes
-          </button>
+            ))}
+          </div>
         </div>
+
+        <hr className="my-4" />
+
+        {/* Preferences Section */}
+        <h3 className="text-lg font-semibold">Preferences</h3>
+
+        <div>
+          <label className="block mb-2 font-medium">
+            Distance Range ({formData.distanceRange} km)
+          </label>
+          <input
+            type="range"
+            min="50"
+            max="200"
+            value={formData.distanceRange}
+            onChange={(e) =>
+              setFormData({ ...formData, distanceRange: Number(e.target.value) })
+            }
+            className="w-full"
+          />
+        </div>
+
+        {/* Single-select Dropdowns */}
+        {[
+          { label: "Tee Boxes", name: "teeBoxes", options: TEE_BOX_OPTIONS },
+          { label: "Cart Preference", name: "cart", options: CART_OPTIONS },
+        ].map(({ label, name, options }) => (
+          <div key={name}>
+            <label>{label}</label>
+            <select
+              value={(formData as any)[name]}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  [name]:
+                    e.target.value !== "" ? Number(e.target.value) : "",
+                })
+              }
+              className="border p-2 w-full rounded"
+            >
+              <option value="">Select</option>
+              {Object.entries(options).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
+
+        {/* Multi-selects */}
+        {[
+          { label: "Time of Day", name: "timeOfDay", options: TIME_OF_DAY_OPTIONS },
+          { label: "Weather Preferences", name: "weatherPreference", options: WEATHER_OPTIONS },
+          { label: "Music Preferences", name: "musicPreference", options: MUSIC_PREFERENCES },
+          { label: "Pace of Play", name: "paceOfPlay", options: PACE_OF_PLAY_OPTIONS },
+          { label: "Conversation Level", name: "conversationLevel", options: CONVERSATION_LEVEL_OPTIONS },
+        ].map(({ label, name, options }) => (
+          <div key={name}>
+            <label>{label}</label>
+            <select
+              multiple
+              value={(formData as any)[name]}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  [name]: Array.from(e.target.selectedOptions, (opt) =>
+                    Number(opt.value)
+                  ),
+                })
+              }
+              className="border p-2 w-full rounded"
+            >
+              {Object.entries(options).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
+
+        {/* Boolean Checkboxes */}
+        {[
+          "similarAge",
+          "sameGender",
+          "playWithSimilarHandicap",
+          "drinking",
+          "okayWithPartnerDrinking",
+          "smoking",
+          "okayWithPartnerSmoking",
+          "music",
+        ].map((name) => (
+          <div key={name}>
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                checked={(formData as any)[name]}
+                onChange={(e) =>
+                  setFormData({ ...formData, [name]: e.target.checked })
+                }
+                className="mr-2"
+              />
+              {name.replace(/([A-Z])/g, " $1").replace(/^./, (str) =>
+                str.toUpperCase()
+              )}
+              ?
+            </label>
+          </div>
+        ))}
+
+        <div className="grid border-t border-gray-500 pt-6">
+          <UploadFile
+            files={files}
+            documentID={0}
+            description={""}
+            setFiles={setFiles}
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded w-full"
+        >
+          Save Changes
+        </button>
+
       </div>
-    </form>
-  );
+    </div>
+  </form>
+);
 };
 
 export default EditProfile;
