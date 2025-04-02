@@ -2,20 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import SendMessageForm from "@/app/components/conversations/SendMessageForm";
 
 export default function ConversationPage() {
 
-    const { conversationSid } = useParams();
+    const params = useParams();
+    const conversationSid = params.conversationSid as string;
     const [messages, setMessages] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
 
+        if (!conversationSid) {
+            setError("Invalid conversation ID");
+            setLoading(false);
+            return;
+        }
+
         const fetchMessages = async () => {
             try {
                 console.log(conversationSid);
-                const res = await fetch(`/api/conversations/${conversationSid}/messages`);
+                const res = await fetch(`/api/conversations/${conversationSid}`);
                 if (!res.ok) {
                     throw new Error("Failed to fetch messages");
                 }
@@ -31,6 +39,10 @@ export default function ConversationPage() {
         fetchMessages();
     }, [conversationSid]);
 
+    const addMessage = (message: any) => {
+        setMessages((prevMessages) => [message, ...prevMessages]);
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -44,6 +56,7 @@ export default function ConversationPage() {
                     </li>
                 ))}
             </ul>
+            <SendMessageForm conversationSid={conversationSid as string} addMessage={(msg) => setMessages((prev) => [msg, ...prev])} />
         </div>
     );
 }    
