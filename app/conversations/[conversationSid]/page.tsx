@@ -39,10 +39,6 @@ export default function ConversationPage() {
         fetchMessages();
     }, [conversationSid]);
 
-    const addMessage = (message: any) => {
-        setMessages((prevMessages) => [message, ...prevMessages]);
-    };
-
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 

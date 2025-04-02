@@ -21,7 +21,7 @@
     "react-range": "^1.10.0",
     "react-swipeable": "^7.0.2",
     "twilio": "^5.5.1",
-    "twilio-sync": "^3.3.7"
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
