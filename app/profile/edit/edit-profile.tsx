@@ -1,7 +1,7 @@
 "use client";
 
 import { getSignedURL, addToDB } from "@/app/components/file/actions";
-import UploadFile from "@/app/components/file/upload";
+import UploadFile from "@/app/components/file/Upload";
 import { PreferenceSet, User } from "@prisma/client";
 import { useState } from "react";
 import Image from 'next/image'
