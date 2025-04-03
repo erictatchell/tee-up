@@ -32,10 +32,10 @@ export default async function Profile() {
   };
   const dbUser = await prisma.user.findUnique({
     where: {
-        id: user.id
+      id: user.id
     }
   })
-  let userImage: string| null | undefined = dbUser?.profilePhoto;
+  let userImage: string | null | undefined = dbUser?.profilePhoto;
   if (!userImage) {
     userImage = '/images/empty_profile.png'
   }
@@ -43,17 +43,21 @@ export default async function Profile() {
     <div className="flex flex-col items-center font-[family-name:var(--font-geist-sans)]">
       {/* Main Section - Full Screen */}
       <main className="relative z-10 flex flex-col items-center justify-center min-h-screen gap-8 text-center">
-        <Image
-          src={userImage}
-          width={500}
-          height={500}
-          alt="Picture of the author"
-        />
+        <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-md">
+          <Image
+            src={userImage}
+            alt={userInfo.name || "Profile photo"}
+            width={192}
+            height={192}
+            className="object-cover w-full h-full"
+          />
+        </div>
+
         <label>{userInfo.name}</label>
         <label>{userInfo.email}</label>
         <NavClient name={userInfo.name} />
         <MButton link="/profile/edit" text="Edit Profile" />
-        <MButton link="/profile/filters" text="Edit Filters" />
+        <MButton link="/queue" text="Find a Match" />
       </main>
     </div>
   );
