@@ -26,7 +26,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     session: async ({ session, user }) => {
       if (session?.user) {
-        session.user.id = user.id; // ✅ this line is essential for server auth()
+        session.user.id = user.id;
       }
       return session;
     },
