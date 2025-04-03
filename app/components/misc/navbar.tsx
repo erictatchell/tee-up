@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import MButton from "./button";
+import MButton from "./MButton";
 
 export default async function NavBar() {
 

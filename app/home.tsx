@@ -1,6 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
-import MButton from "./components/misc/button";
+import MButton from "./components/misc/MButton";
 
 type HomeProps = {
   user: boolean

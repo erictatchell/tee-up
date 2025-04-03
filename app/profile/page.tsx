@@ -5,7 +5,7 @@ import { prisma } from "@/prisma";
 import { redirect } from "next/navigation";
 
 import NavClient from "@/nav-client";
-import MButton from "../components/misc/button";
+import MButton from "../components/misc/MButton";
 
 export default async function Profile() {
   const session = await auth();
