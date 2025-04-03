@@ -36,7 +36,7 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
     name: user.name || "",
     profilePhoto: user.profilePhoto || "",
     handicap: user.handicap || "",
-    age: user.age || "",
+    age: user.age || 0,
     gender: user.gender || 0,
     country: user.country || "",
     province: user.province || "",
@@ -194,6 +194,7 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
           {/* User Fields */}
           {[
             { label: "Name", name: "name", type: "text" },
+            { label: "Age", name: "age", type: "number" },
             { label: "Country", name: "country", type: "text" },
             { label: "Province", name: "province", type: "text" },
             { label: "City", name: "city", type: "text" },
