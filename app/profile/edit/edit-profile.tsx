@@ -182,13 +182,15 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
       <div className="flex justify-center">
         <div className="mt-24 w-1/2 space-y-4">
           <h2 className="text-xl font-semibold">Edit Profile</h2>
-          <Image
-            src={user.profilePhoto!}
-            width={500}
-            height={500}
-            alt="Picture of the author"
-          />
-
+          <div className="w-40 h-40 mx-auto rounded-full overflow-hidden border-4 border-white shadow-md">
+            <Image
+              src={user.profilePhoto || "/images/empty_profile.png"}
+              width={160}
+              height={160}
+              alt={user.name || "Profile image"}
+              className="object-cover w-full h-full"
+            />
+          </div>
           {/* User Fields */}
           {[
             { label: "Name", name: "name", type: "text" },
