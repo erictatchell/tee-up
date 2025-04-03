@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { Profile } from "../components/queue/ProfileCard";
+import { sendMatchEmail } from "@/app/actions/sendMatchEmail";
 
 export default function useProfileQueuing(
     profiles: Profile[],
     setProfiles: (profiles: Profile[]) => void,
-    setHasReachedEnd: (value: boolean) => void
+    setHasReachedEnd: (value: boolean) => void,
+    currentUserEmail: string
 ) {
 
     // State to keep track of the current profile index
@@ -14,11 +16,16 @@ export default function useProfileQueuing(
     const [skippedProfiles, setSkippedProfiles] = useState<Profile[]>([]);
 
     // Function to handle swipe action
-    const handleSwipe = async (id: number, like: boolean) => {
-        console.log(`User ${id} was ${like ? 'liked' : 'skipped'}`);
+    const handleSwipe = async (profile: Profile, like: boolean) => {
+        console.log(`User ${profile.id} was ${like ? 'liked' : 'skipped'}`);
 
         // Add the profile to the skipped list if it was skipped
-        if (!like) {
+        if (like) {
+            await sendMatchEmail({
+              to: currentUserEmail,             // logged-in user's email
+              likedUserEmail: profile.email!,  // liked user's email
+            });
+          
             setSkippedProfiles((prev) => [...prev, profiles[currentProfileIndex]]);
         }
 

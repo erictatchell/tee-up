@@ -20,7 +20,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  profilePhoto String? // S3 path
+  profilePhoto String?  @default("/images/empty_profile.png")// S3 path
   photoGallery String[] @default([])
   handicap     Float    @default(0)
   age          Int      @default(0)

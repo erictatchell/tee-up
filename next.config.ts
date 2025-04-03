@@ -7,6 +7,15 @@ const nextConfig: NextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'tee-up-photos.s3.us-west-2.amazonaws.com',
+        pathname: '**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

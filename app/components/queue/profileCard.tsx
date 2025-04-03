@@ -15,6 +15,7 @@ const MUSIC_PREFERENCES: Record<number, string> = { 0: "Rock", 1: "Pop", 2: "Jaz
 export interface Profile {
   id: string;
   name: string;
+  email: string;
   age: number;
   image: string | null;
   city: string;
@@ -48,7 +49,7 @@ export interface Profile {
 
 interface ProfileCardProps {
   profile: Profile;
-  onSwipe: (id: string, like: boolean) => void;
+  onSwipe: (profile: Profile, like: boolean) => void;
 }
 
 export function ProfileCard({ profile, onSwipe }: ProfileCardProps) {
@@ -66,10 +67,10 @@ export function ProfileCard({ profile, onSwipe }: ProfileCardProps) {
 
     if (info.offset.x > threshold) {
       await controls.start({ x: 500, opacity: 0 }); // Swipe right
-      await onSwipe(profile.id, true);
+      await onSwipe(profile, true);
     } else if (info.offset.x < -threshold) {
       await controls.start({ x: -500, opacity: 0 }); // Swipe left
-      await onSwipe(profile.id, false);
+      await onSwipe(profile, false);
     } else {
       controls.start({ x: 0, opacity: 1 }); // Return to center
     }
@@ -89,13 +90,14 @@ export function ProfileCard({ profile, onSwipe }: ProfileCardProps) {
       initial={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0 }}
     >
-      <div className="w-[400px] h-[400px] p-6 overflow-hidden rounded-lg">
+      <div className="w-[300px] h-[300px] p-6 overflow-hidden rounded-lg">
         <img
           src={profile.image || "/images/empty_profile.png"}
           alt={profile.name}
           className="object-cover object-top w-full h-full rounded-lg"
         />
       </div>
+
       <h1 className="text-3xl font-bold mt-4">{profile.name}, {profile.age}</h1>
       <p className="text-m">
         Gender: {GENDERS[profile.gender]} • Handicap: {profile.handicap} • {profile.city}, {profile.province}
@@ -137,7 +139,7 @@ export function ProfileCard({ profile, onSwipe }: ProfileCardProps) {
             if (isSwiping) return;
             setIsSwiping(true);
             await controls.start({ x: -500, opacity: 0 });
-            await onSwipe(profile.id, false);
+            await onSwipe(profile, false);
             setIsSwiping(false);
           }}
           className="px-6 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
@@ -159,7 +161,7 @@ export function ProfileCard({ profile, onSwipe }: ProfileCardProps) {
             if (isSwiping) return;
             setIsSwiping(true);
             await controls.start({ x: 500, opacity: 0 });
-            await onSwipe(profile.id, true);
+            await onSwipe(profile, true);
             setIsSwiping(false);
           }}
           className="px-6 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition"
