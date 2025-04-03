@@ -12,6 +12,7 @@
     "@auth/prisma-adapter": "^2.7.4",
     "@prisma/adapter-pg": "^6.3.1",
     "@prisma/client": "^6.3.1",
+    "@twilio/conversations": "^2.6.2",
     "framer-motion": "^12.4.10",
     "next": "^15.2.4",
     "next-auth": "^5.0.0-beta.25",
@@ -20,8 +21,7 @@
     "react-dom": "^19.0.0",
     "react-range": "^1.10.0",
     "react-swipeable": "^7.0.2",
-    "twilio": "^5.5.1",
-    "ws": "^8.18.1"
+    "twilio": "^5.5.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

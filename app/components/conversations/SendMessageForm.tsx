@@ -1,32 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import { Conversation } from "@twilio/conversations";
 
 export default function SendMessageForm({
-    conversationSid,
-    addMessage,
+    conversation,
+    username,
 }: {
-    conversationSid: string;
-    addMessage: (message: any) => void;
+    conversation: Conversation | null;
+    username: string | null
 }) {
     const [message, setMessage] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!conversation || !message.trim()) return;
 
         try {
-            const response = await fetch(`/api/conversations/${conversationSid}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ body: message }),
-            });
-
-            if (!response.ok) throw new Error("Failed to send message");
-
-            const data = await response.json();
-            // Optimistically update the state with the new message
-            addMessage({ sid: data.message.sid, from: "You", body: data.message.body });
-
+            await conversation.sendMessage(message, { attributes: JSON.stringify({ from: username }) });
             setMessage("");
         } catch (error) {
             console.error("Error sending message:", error);
