@@ -7,14 +7,12 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID!;
 const authToken = process.env.TWILIO_AUTH_TOKEN!;
 const client = new Twilio(accountSid, authToken);
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { conversationSid: string } }
-) {
-  const conversationSid = params.conversationSid;
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url);
+  const segments = url.pathname.split("/");
+  const conversationSid = segments[segments.indexOf("conversations") + 1];
 
   if (!conversationSid) {
-    console.log("Missing conversation ID");
     return NextResponse.json({ error: "Missing conversation ID" }, { status: 400 });
   }
 
@@ -40,21 +38,18 @@ export async function GET(
   }
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { conversationSid: string } }
-) {
-  const conversationSid = params.conversationSid;
+export async function POST(req: NextRequest) {
+  const url = new URL(req.url);
+  const segments = url.pathname.split("/");
+  const conversationSid = segments[segments.indexOf("conversations") + 1];
 
   if (!conversationSid) {
-    console.log("Missing conversation ID");
     return NextResponse.json({ error: "Missing conversation ID" }, { status: 400 });
   }
 
   const { body } = await req.json();
 
   if (!body || typeof body !== "string") {
-    console.log("Invalid message body", body);
     return NextResponse.json({ error: "Invalid message body" }, { status: 400 });
   }
 
