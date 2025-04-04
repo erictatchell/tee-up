@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ProfileCard } from "../components/queue/ProfileCard";
+import { ProfileCard } from "../components/queue/profileCard";
 import useProfileMatches from "./useProfileMatches";
 import useProfileQueuing from "./useProfileQueuing";
 import { motion } from "framer-motion";
