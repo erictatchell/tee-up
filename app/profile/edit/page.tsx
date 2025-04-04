@@ -3,6 +3,7 @@ import { prisma } from "@/prisma";
 import EditProfile from "./edit-profile";
 import { PreferenceSet, User } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { addToDB, getSignedURL } from "@/app/components/file/actions";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -87,8 +88,10 @@ export default async function ProfilePage() {
       },
     });
 
-    redirect("/profile");
+    // redirect("/profile");
   }
+
+
   async function savePhoto(updatedUser: User) {
     "use server";
     await prisma.user.update({
