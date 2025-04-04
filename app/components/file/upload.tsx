@@ -70,7 +70,7 @@ const UploadFile: React.FC<FileProps> = ({ files, setFiles, submit }) => {
                 id="fileInput"
                 className="bg-transparent flex-1 border-none outline-none hidden"
                 type="file"
-                accept=".pdf, .docx"
+                accept=".pdf, .docx, .jpg, .jpeg, .png"
                 onChange={handleFileChange}
                 multiple
               />

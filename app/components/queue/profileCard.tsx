@@ -18,6 +18,7 @@ export interface Profile {
   email: string;
   age: number;
   image: string | null;
+  profilePhoto: string | null;
   city: string;
   province: string;
   country: string;
@@ -92,7 +93,7 @@ export function ProfileCard({ profile, onSwipe }: ProfileCardProps) {
     >
       <div className="w-[300px] h-[300px] p-6 overflow-hidden rounded-lg">
         <img
-          src={profile.image || "/images/empty_profile.png"}
+          src={profile.profilePhoto || profile.image || "/images/empty_profile.png"}
           alt={profile.name}
           className="object-cover object-top w-full h-full rounded-lg"
         />
