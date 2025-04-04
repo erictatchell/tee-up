@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Profile } from "../components/queue/ProfileCard";
+import { Profile } from "../components/queue/profileCard";
 
 type MatchResponse = {
   user: Profile;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Profile } from "../components/queue/ProfileCard";
+import { Profile } from "../components/queue/profileCard";
 import { sendMatchEmail } from "@/app/actions/sendMatchEmail";
 
 export default function useProfileQueuing(
