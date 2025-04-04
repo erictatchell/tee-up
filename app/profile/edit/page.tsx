@@ -70,7 +70,7 @@ export default async function ProfilePage() {
     if (!updatedUser) {
       return;
     }
-    await prisma.user.update({
+    const update = await prisma.user.update({
       where: { id: updatedUser.id },
       data: {
         name: updatedUser.name,
@@ -87,8 +87,6 @@ export default async function ProfilePage() {
         },
       },
     });
-
-    // redirect("/profile");
   }
 
 

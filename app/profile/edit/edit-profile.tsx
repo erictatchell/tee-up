@@ -110,6 +110,9 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
     );
 
     await handleFiles(files)
+
+    alert("Success!")
+
   }
 
 
