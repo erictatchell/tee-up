@@ -1,3 +1,5 @@
+// app/api/conversations/[conversationSid]/messages/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 import { Twilio } from "twilio";
 
@@ -7,9 +9,9 @@ const client = new Twilio(accountSid, authToken);
 
 export async function GET(
   req: NextRequest,
-  context: { params: { conversationSid: string } }
+  { params }: { params: { conversationSid: string } }
 ) {
-  const conversationSid = context.params.conversationSid;
+  const conversationSid = params.conversationSid;
 
   if (!conversationSid) {
     console.log("Missing conversation ID");
@@ -40,9 +42,9 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  context: { params: { conversationSid: string } }
+  { params }: { params: { conversationSid: string } }
 ) {
-  const conversationSid = context.params.conversationSid;
+  const conversationSid = params.conversationSid;
 
   if (!conversationSid) {
     console.log("Missing conversation ID");
