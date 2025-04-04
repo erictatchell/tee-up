@@ -26,7 +26,7 @@ const NavClient: React.FC<NavClientProps> = ({ name }) => {
       ) : (
         <button
           type="submit"
-          className="p-2 bg-blue-700 w-[60%] mx-auto rounded-md hover:bg-blue-800"
+          className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
           onClick={() =>
             signOut({
               callbackUrl: "/",
