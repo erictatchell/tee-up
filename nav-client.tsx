@@ -3,7 +3,7 @@
 
 import { signIn, signOut } from "next-auth/react";
 
-import MButton from "./app/components/misc/MButton";
+import MButton from "./app/components/misc/button";
 interface NavClientProps {
   name?: string;
 }
