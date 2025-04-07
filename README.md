@@ -35,40 +35,39 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-## Documentation
-
+```text
 .
 ├── README.md
 ├── app
 │   ├── actions
-│   │   └── sendMatchEmail.ts # Sends emails using SendGrid for notifying matches
+│   │   └── sendMatchEmail.ts         # Sends emails using SendGrid
 │   ├── api
-│   │   ├── auth # Exposes endpoint for Google OAuth
-│   │   ├── conversations # Handles Twilio Conversations API for Direct Messages (unused in production)
-│   │   ├── get-filters # Retrieves mock data from /data
-│   │   ├── matches # Matchmaking logic
-│   │   ├── twilio # Token retrieval for Conversations web sockets (unused in production)
+│   │   ├── auth                      # Google OAuth endpoint
+│   │   ├── conversations             # Twilio Conversations API (unused)
+│   │   ├── get-filters               # Mock data from /data
+│   │   ├── matches                   # Matchmaking logic
+│   │   ├── twilio                    # Token retrieval (unused)
 │   │   ├── update-filters
-│   │   └── upload # Handles file uploads for profile pictures
+│   │   └── upload                    # Profile picture uploads
 │   ├── components
-│   │   ├── conversations # Conversation initiation and individual conversations components
-│   │   ├── file # S3 File upload logic and components
-│   │   ├── login # Sign in with Google button
+│   │   ├── conversations             # DM components
+│   │   ├── file                      # S3 upload logic
+│   │   ├── login                     # Google Sign-In button
 │   │   ├── misc
-│   │   └── queue # Profile card for matchmaking
+│   │   └── queue                     # Profile cards
 │   ├── conversations
-│   │   ├── [conversationSid] # Individual conversation page
-│   │   └── page.tsx # Conversation initiation page
+│   │   ├── [conversationSid]         # Individual chat page
+│   │   └── page.tsx                  # Conversation init
 │   ├── favicon.ico
 │   ├── globals.css
 │   ├── home.tsx
 │   ├── layout.tsx
-│   ├── onboarding # Onboarding flow for new users before matchmaking
+│   ├── onboarding                    # New user flow
 │   ├── page.tsx
-│   ├── profile # Profile view and edit pages
-│   └── queue # Queue page and logic
+│   ├── profile                       # Profile edit/view
+│   └── queue                         # Queue logic
 ├── auth.ts
-├── data # Static mock data
+├── data                              # Mock data
 │   ├── filters.json
 │   └── users.json
 ├── env
@@ -106,3 +105,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ├── types
 │   └── next-auth.d.ts
 └── types.tsx
+```
