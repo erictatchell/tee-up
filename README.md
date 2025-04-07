@@ -34,3 +34,75 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Documentation
+
+.
+├── README.md
+├── app
+│   ├── actions
+│   │   └── sendMatchEmail.ts # Sends emails using SendGrid for notifying matches
+│   ├── api
+│   │   ├── auth # Exposes endpoint for Google OAuth
+│   │   ├── conversations # Handles Twilio Conversations API for Direct Messages (unused in production)
+│   │   ├── get-filters # Retrieves mock data from /data
+│   │   ├── matches # Matchmaking logic
+│   │   ├── twilio # Token retrieval for Conversations web sockets (unused in production)
+│   │   ├── update-filters
+│   │   └── upload # Handles file uploads for profile pictures
+│   ├── components
+│   │   ├── conversations # Conversation initiation and individual conversations components
+│   │   ├── file # S3 File upload logic and components
+│   │   ├── login # Sign in with Google button
+│   │   ├── misc
+│   │   └── queue # Profile card for matchmaking
+│   ├── conversations
+│   │   ├── [conversationSid] # Individual conversation page
+│   │   └── page.tsx # Conversation initiation page
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── home.tsx
+│   ├── layout.tsx
+│   ├── onboarding # Onboarding flow for new users before matchmaking
+│   ├── page.tsx
+│   ├── profile # Profile view and edit pages
+│   └── queue # Queue page and logic
+├── auth.ts
+├── data # Static mock data
+│   ├── filters.json
+│   └── users.json
+├── env
+├── eslint.config.mjs
+├── migrations
+│   ├── 20250214162242_init
+│   ├── 20250314024807_update_schema_1
+│   ├── 20250314061555_gender_int
+│   ├── 20250314200150_nothing_can_be_null
+│   ├── 20250315001051_defaults
+│   ├── 20250325091320_add_onboarding_status
+│   ├── 20250401224722_default_photo
+│   └── migration_lock.toml
+├── nav-client.tsx
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── prisma
+│   └── seed.ts
+├── prisma.ts
+├── public
+│   ├── file.svg
+│   ├── filters.json
+│   ├── globe.svg
+│   ├── images
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+├── schema.prisma
+├── tailwind.config.ts
+├── tsconfig.json
+├── tsconfig.tsbuildinfo
+├── types
+│   └── next-auth.d.ts
+└── types.tsx
