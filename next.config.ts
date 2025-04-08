@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  env: {
+    AUTH_SECRET: process.env.AUTH_SECRET,
+  },
   /* config options here */
   eslint: {
     // Warning: This allows production builds to successfully complete even if

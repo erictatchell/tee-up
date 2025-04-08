@@ -110,6 +110,9 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
     );
 
     await handleFiles(files)
+
+    alert("Success!")
+
   }
 
 
@@ -191,6 +194,16 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
               className="object-cover w-full h-full"
             />
           </div>
+
+          <div className="grid pt-2">
+            <UploadFile
+              files={files}
+              documentID={0}
+              description={""}
+              setFiles={setFiles}
+            />
+          </div>
+
           {/* User Fields */}
           {[
             { label: "Name", name: "name", type: "text" },
@@ -344,15 +357,6 @@ const EditProfile: React.FunctionComponent<EditProfileProps> = ({
               </label>
             </div>
           ))}
-
-          <div className="grid border-t border-gray-500 pt-6">
-            <UploadFile
-              files={files}
-              documentID={0}
-              description={""}
-              setFiles={setFiles}
-            />
-          </div>
 
           <button
             type="submit"
