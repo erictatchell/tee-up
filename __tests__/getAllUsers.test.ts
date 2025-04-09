@@ -2,10 +2,14 @@ import prisma from "@/prisma"; // ✅ this was missing!
 import { getAllUsers } from "@/lib/getAllUsers";
 
 jest.mock("@/prisma", () => ({
-  user: {
-    findMany: jest.fn(),
+  __esModule: true,
+  prisma: {
+    user: {
+      findMany: jest.fn(),
+    },
   },
 }));
+
 
 describe("Prisma - getAllUsers", () => {
   it("should fetch all users from the DB", async () => {
