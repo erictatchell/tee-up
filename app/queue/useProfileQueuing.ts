@@ -4,6 +4,21 @@ import { useState } from "react";
 import { Profile } from "../components/queue/profileCard";
 import { sendMatchEmail } from "@/app/actions/sendMatchEmail";
 
+/**
+ * Custom hook for managing profile queuing functionality, including swiping actions
+ * and reviewing skipped profiles.
+ *
+ * @param profiles - Array of profiles to be queued and displayed.
+ * @param setProfiles - Function to update the list of profiles.
+ * @param setHasReachedEnd - Function to set whether the end of the profile queue has been reached.
+ * @param currentUserEmail - Email of the currently logged-in user.
+ * 
+ * @returns An object containing:
+ * - `currentProfileIndex`: The index of the currently displayed profile.
+ * - `handleSwipe`: Function to handle swipe actions (like or skip) on a profile.
+ * - `reviewSkippedProfiles`: Function to review and reset skipped profiles.
+ * - `skippedProfiles`: Array of profiles that were skipped.
+ */
 export default function useProfileQueuing(
     profiles: Profile[],
     setProfiles: (profiles: Profile[]) => void,
@@ -22,10 +37,10 @@ export default function useProfileQueuing(
         // Add the profile to the skipped list if it was skipped
         if (like) {
             await sendMatchEmail({
-              to: currentUserEmail,             // logged-in user's email
-              likedUserEmail: profile.email!,  // liked user's email
+                to: currentUserEmail,             // logged-in user's email
+                likedUserEmail: profile.email!,  // liked user's email
             });
-          
+
             setSkippedProfiles((prev) => [...prev, profiles[currentProfileIndex]]);
         }
 

@@ -3,6 +3,26 @@
 import { useState } from "react";
 import { Conversation } from "@twilio/conversations";
 
+/**
+ * A React component that renders a form for sending messages within a conversation.
+ *
+ * @param {Object} props - The props object.
+ * @param {Conversation | null} props.conversation - The conversation object to which the message will be sent. If null, the form will not send messages.
+ * @param {string | null} props.username - The username of the sender, used to identify the sender in the message attributes.
+ *
+ * @returns {JSX.Element} The rendered SendMessageForm component.
+ *
+ * @remarks
+ * - The component maintains a local state `message` to track the input value.
+ * - The `handleSubmit` function prevents the default form submission behavior, validates the input, and sends the message using the `conversation.sendMessage` method.
+ * - If the message is successfully sent, the input field is cleared.
+ * - If an error occurs during message sending, it is logged to the console.
+ *
+ * @example
+ * ```tsx
+ * <SendMessageForm conversation={activeConversation} username="john_doe" />
+ * ```
+ */
 export default function SendMessageForm({
     conversation,
     username,
@@ -16,6 +36,7 @@ export default function SendMessageForm({
         e.preventDefault();
         if (!conversation || !message.trim()) return;
 
+        // Send message to the other user
         try {
             await conversation.sendMessage(message, { attributes: JSON.stringify({ from: username }) });
             setMessage("");
