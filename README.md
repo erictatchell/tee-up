@@ -44,10 +44,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 │   ├── api
 │   │   ├── auth                      # Google OAuth endpoint
 │   │   ├── conversations             # Twilio Conversations API (unused)
-│   │   ├── get-filters               # Mock data from /data
+│   │   ├── get-filters               # Mock data from /data (unused)
 │   │   ├── matches                   # Matchmaking logic
 │   │   ├── twilio                    # Token retrieval for Conversations with Web Sockets (unused)
-│   │   ├── update-filters
+│   │   ├── update-filters            # Updating mock filter data (unused)
 │   │   └── upload                    # Profile picture uploads
 │   ├── components
 │   │   ├── conversations             # DM components
