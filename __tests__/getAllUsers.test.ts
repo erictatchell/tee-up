@@ -9,7 +9,7 @@ jest.mock("@/prisma", () => ({
 
 describe("Prisma - getAllUsers", () => {
   it("should fetch all users from the DB", async () => {
-    const mockUsers = [{ id: "1", name: "Jas" }, { id: "2", name: "Simrit" }];
+    const mockUsers = [{ id: "1", name: "Jas" }, { id: "2", name: "Eric" }];
 
     (prisma.user.findMany as jest.Mock).mockResolvedValue(mockUsers);
 
