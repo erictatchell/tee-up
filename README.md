@@ -46,7 +46,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 │   │   ├── conversations             # Twilio Conversations API (unused)
 │   │   ├── get-filters               # Mock data from /data
 │   │   ├── matches                   # Matchmaking logic
-│   │   ├── twilio                    # Token retrieval (unused)
+│   │   ├── twilio                    # Token retrieval for Conversations with Web Sockets (unused)
 │   │   ├── update-filters
 │   │   └── upload                    # Profile picture uploads
 │   ├── components
