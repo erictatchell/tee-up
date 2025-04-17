@@ -8,10 +8,10 @@
 │   ├── api
 │   │   ├── auth                      # Google OAuth endpoint
 │   │   ├── conversations             # Twilio Conversations API (unused)
-│   │   ├── get-filters               # Mock data from /data
+│   │   ├── get-filters               # Mock data from /data (unused)
 │   │   ├── matches                   # Matchmaking logic
-│   │   ├── twilio                    # Token retrieval (unused)
-│   │   ├── update-filters
+│   │   ├── twilio                    # Token retrieval for Conversations with Web Sockets (unused)
+│   │   ├── update-filters            # Updating mock filter data (unused)
 │   │   └── upload                    # Profile picture uploads
 │   ├── components
 │   │   ├── conversations             # DM components
